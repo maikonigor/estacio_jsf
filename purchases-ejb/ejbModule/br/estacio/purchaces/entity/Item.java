@@ -1,5 +1,7 @@
 package br.estacio.purchaces.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,13 +12,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Item {
+public class Item implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@OneToOne(cascade={CascadeType.PERSIST, CascadeType.REMOVE})
+	@OneToOne
 	private Produto produto;
 	
 	private Integer quantidade;
@@ -29,12 +36,15 @@ public class Item {
 		
 	}
 	
-	public Item(Integer id, Produto produto, Integer quantidade, Pedido pedido) {
-		super();
-		this.id = id;
+	public Item(Produto produto, Integer quantidade) {
 		this.produto = produto;
 		this.quantidade = quantidade;
+	}
+	
+	public Item(Integer id, Produto produto, Integer quantidade, Pedido pedido) {
+		this(produto,quantidade);
 		this.pedido = pedido;
+		this.id = id;
 	}
 
 	public Produto getProduto() {

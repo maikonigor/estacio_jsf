@@ -2,7 +2,6 @@ package br.estacio.purchaces.bean;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -10,6 +9,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import br.estacio.purchaces.ejb.CompraService;
+import br.estacio.purchaces.entity.Item;
 import br.estacio.purchaces.entity.Produto;
 
 @ManagedBean
@@ -17,25 +17,28 @@ import br.estacio.purchaces.entity.Produto;
 public class CompraBean {
 
 	private int quantidade;
+	private Integer idProdutoSelecionado;
 	private Produto produtoSelecionado;
-	private List<Produto> produtosAdicionados;
+	private List<Item> itensAdicionados;
 	
 	@EJB
 	private CompraService compraService;
 	
 	public CompraBean() {
 		quantidade = 0;
-		produtosAdicionados = new ArrayList<>();
+		itensAdicionados = new ArrayList<>();
 	}
 	
 	public void adicionarLista(int quantidade){
-		produtosAdicionados.add(produtoSelecionado);
+		Produto produtoSelecionado = compraService.getProduto(idProdutoSelecionado);
+		Item item = new Item(produtoSelecionado, quantidade);
+		itensAdicionados.add(item);
 		this.quantidade = quantidade;
 	}
 	
-	public Produto[] getProdutos() {
-		Produto[] produtos = compraService.getProdutos();
-		System.out.println(Arrays.toString(produtos));
+	
+	public List<Produto> getProdutos() {
+		List<Produto> produtos = compraService.getProdutos();
 		return produtos;
 	}
 
@@ -54,12 +57,21 @@ public class CompraBean {
 		this.produtoSelecionado = produtoSelecionado;
 	}
 
-	public List<Produto> getProdutosAdicionados() {
-		return produtosAdicionados;
+	public List<Item> getItensAdicionados() {
+		return itensAdicionados;
+	}
+	
+	public void setItensAdicionados(List<Item> itensAdicionados) {
+		this.itensAdicionados = itensAdicionados;
 	}
 
-	public void setProdutosAdicionados(List<Produto> produtosAdicionados) {
-		this.produtosAdicionados = produtosAdicionados;
+	public Integer getIdProdutoSelecionado() {
+		return idProdutoSelecionado;
 	}
+
+	public void setIdProdutoSelecionado(Integer idProdutoSelecionado) {
+		this.idProdutoSelecionado = idProdutoSelecionado;
+	}
+	
 	
 }
