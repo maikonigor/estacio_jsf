@@ -24,7 +24,7 @@
 		</p>
 
 		<p>
-			<h:dataTable value="#{compraBean.itensAdicionados}" var="item"
+			<h:dataTable value="#{compraBean.getItensAdcionados()}" var="item"
 				styleClass="produtoTable">
 				<h:column>
 					<f:facet name="header">ID</f:facet>    				
@@ -49,7 +49,12 @@
 			</h:dataTable>
 		</p>
 		<p>
-			<h:commandButton action="#{pedidoBean.salvarPedido(compraBean.itensAdicionados)}" value="Fechar Pedido" />
+			<h:outputLabel value="Total"/>
+			<span> - </span>
+			<h:outputLabel value="#{compraBean.precoTotal()}" />
+		</p>
+		<p>
+			<h:commandButton action="#{compraBean.finalizarCompra()}" value="Fechar Pedido" />
 		</p>
 	</h:form>
 </h:body>

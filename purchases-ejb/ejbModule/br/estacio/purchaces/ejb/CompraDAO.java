@@ -3,10 +3,12 @@ package br.estacio.purchaces.ejb;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import br.estacio.frameworks.service.StatusPedidoResult;
 import br.estacio.purchaces.entity.Item;
 import br.estacio.purchaces.entity.Pedido;
 import br.estacio.purchaces.entity.Produto;
@@ -22,13 +24,11 @@ public class CompraDAO implements CompraService{
 
 	@Override
 	public void adicionarItem(Item item) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public Double getTotal() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -56,13 +56,29 @@ public class CompraDAO implements CompraService{
 
 	@Override
 	public List<Item> getItens() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Produto getProduto(Integer id) {
 		return em.find(Produto.class, id);
+	}
+
+	@Override
+	public Pedido[] getPedidosNaoFinalizados() {
+		String query = "SELECT p FROM Pedido p WHERE p.status <> 'FINALIZADO'";
+		List<Pedido> pedidosList = em.createQuery(query).getResultList();
+		Pedido[] pedidos = new Pedido[pedidosList.size()];
+		return pedidosList.toArray(pedidos);
+	}
+
+	@Override
+	public void atualizarPedidos(StatusPedidoResult[] resultados) {
+		Pedido pedido;
+		for(StatusPedidoResult r : resultados){
+			pedido = em.find(Pedido.class, r.getId());
+			pedido.setStatus(Pedido.Status.valueOf(r.getStatus()));
+		}
 	}
 	
 

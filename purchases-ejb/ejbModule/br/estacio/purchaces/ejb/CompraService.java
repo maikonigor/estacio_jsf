@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
+import br.estacio.frameworks.service.StatusPedidoResult;
 import br.estacio.purchaces.entity.Item;
 import br.estacio.purchaces.entity.Pedido;
 import br.estacio.purchaces.entity.Produto;
@@ -24,5 +25,9 @@ public interface CompraService {
 	public Pedido SalvarPedido(Pedido pedido);
 	
 	public void salvarItensPedido(Item item);
+	
+	public Pedido[] getPedidosNaoFinalizados();
+	
+	public void atualizarPedidos(StatusPedidoResult[] resultados);
 
 }

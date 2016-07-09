@@ -18,7 +18,7 @@ public class Pedido implements Serializable{
 	public static  enum Status{
 		PENDENTE,
 		PROCESSANDO,
-		APROVADO,
+		PROVADO,
 		FINALIZADO
 	};
 	

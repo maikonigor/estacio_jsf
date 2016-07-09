@@ -1,14 +1,13 @@
 package br.estacio.purchaces.bean;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
-import br.estacio.purchaces.ejb.CompraService;
+import br.estacio.purchaces.ejb.CarrinhoService;
 import br.estacio.purchaces.entity.Item;
 import br.estacio.purchaces.entity.Produto;
 
@@ -19,27 +18,40 @@ public class CompraBean {
 	private int quantidade;
 	private Integer idProdutoSelecionado;
 	private Produto produtoSelecionado;
-	private List<Item> itensAdicionados;
 	
 	@EJB
-	private CompraService compraService;
+	private CarrinhoService carrinho;
+	
 	
 	public CompraBean() {
 		quantidade = 0;
-		itensAdicionados = new ArrayList<>();
+	}
+	
+	public List<Produto> getProdutos() {
+		List<Produto> produtos = carrinho.buscarProdutos();
+		return produtos;
+	}
+	
+	public List<Item> getItensAdcionados(){
+		return carrinho.getItensAdicionados();
 	}
 	
 	public void adicionarLista(int quantidade){
-		Produto produtoSelecionado = compraService.getProduto(idProdutoSelecionado);
-		Item item = new Item(produtoSelecionado, quantidade);
-		itensAdicionados.add(item);
-		this.quantidade = quantidade;
+		carrinho.addItem(idProdutoSelecionado, quantidade);
 	}
 	
+	public void finalizarCompra(){
+		carrinho.finalizarCompra();
+	}
 	
-	public List<Produto> getProdutos() {
-		List<Produto> produtos = compraService.getProdutos();
-		return produtos;
+	public float precoTotal(){
+		float preco = 0.0f;
+		List<Item> itens = getItensAdcionados();
+		for(Item i : itens){
+			preco += (i.getProduto().getValor() * i.getQuantidade());
+		}
+		
+		return preco;
 	}
 
 	public int getQuantidade() {
@@ -55,14 +67,6 @@ public class CompraBean {
 
 	public void setProdutoSelecionado(Produto produtoSelecionado) {
 		this.produtoSelecionado = produtoSelecionado;
-	}
-
-	public List<Item> getItensAdicionados() {
-		return itensAdicionados;
-	}
-	
-	public void setItensAdicionados(List<Item> itensAdicionados) {
-		this.itensAdicionados = itensAdicionados;
 	}
 
 	public Integer getIdProdutoSelecionado() {

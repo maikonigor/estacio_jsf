@@ -28,7 +28,7 @@ public class PedidoEJB implements StatusService {
 	private String gerarStatus(){
 		String status = new String();
 		Random rn = new Random();
-		int n = rn.nextInt(1 - 4 + 1) + 1;
+		int n = (int)(Math.random() * 4) + 1;
 		
 		switch(n){
 			case 1: status = "PENDENTE"; break;

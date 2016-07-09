@@ -30,7 +30,7 @@ public class MessagerReceiver  implements MessageListener {
 			try {
 				String texto = message.getText();
 				
-				System.out.println("Pedido: " +	texto + "Recebido");
+				System.out.println("Pedido: " +	texto + " Recebido");
 			} catch (JMSException e) {
 				e.printStackTrace();
 			}
